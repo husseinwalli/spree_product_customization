@@ -1,0 +1,83 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:editing_resource, resource: Spree::ProductCustomizationOption.model_name.human) %>
+<% end %>
+
+<%= render :partial => 'spree/admin/shared/error_messages', :locals => { :target => @product_customization_option } %>
+
+<%= form_for [:admin, @product, @product_customization_option] do |f| %>
+	<div data-hook="admin_product_customization_option_form" class="row">
+	  <div class="col-md-6">
+	    <%= f.field_container :name, class: ['form-group'] do %>
+	      <%= f.label :name, Spree.t(:display) %> <span class="required">*</span>
+	      <%= f.text_field :name, :class => 'form-control' %>
+	      <%= f.error_message_on :name %>
+	    <% end %>
+	  </div>
+	  <div class="col-md-6">
+	    <%= f.field_container :required, class: ['form-group'] do %>
+	      <%= f.label :required, Spree.t(:required) %> <span class="required">*</span>
+	      <%= f.check_box :required, :class => 'form-control' %>
+	      <%= f.error_message_on :required %>
+	    <% end %>
+	  </div>
+	</div>
+
+
+
+	<!-- check the customization option types, display possible customization option values accordningly -->
+	<div id="customization_option_values_form" class="panel panel-default" data-hook>
+		<div class="panel-heading">
+		<%= @product_customization_option.name %> Values
+		</div>
+
+		<div class="panel-body">
+			<table class="table sortable" data-hook data-sortable-link="<%= update_positions_admin_product_product_customization_option_product_customization_option_values_url({product_customization_option_id: @product_customization_option.id}) %>">
+	      <thead>
+	        <tr data-hook="product_customization_option_values_header">
+	          <th colspan="2">Backend Name (Shown on orders)</th>
+	          <th>Display Name (Shown on website)</th>
+	          <th><%= Spree.t(:price) %></th>
+	          <th><%= Spree.t(:price_per_unit) %></th>
+	          <th class="actions"></th>
+	        </tr>
+	      </thead>
+	      <tbody id="product_customization_option_values" data-hook>
+	        <%= f.fields_for :product_customization_option_values do |pcov_form| %>
+	          <%= render 'product_customization_option_value_fields', f: pcov_form %>
+	        <% end %>
+	      </tbody>
+	    </table>
+
+    <% if false %>
+			<% case @product_customization_option.customization_option.name
+			  when "Message" %>
+				<%= render 'message_customization_values', :f => builder %>
+				<% when "Clipart" %>
+				Clipart
+				<% when "Image Upload" %>
+				Image
+				<% when "Imprint Color" %>
+				Imprint Color Options
+			<% end %>
+		<% end %>
+
+			<div class="form-actions text-center" data-hook="buttons">
+		    <%= button_link_to(Spree.t(:add_customization_option_value), "javascript:;", { icon: 'add', :'data-target' => "tbody#product_customization_option_values", class: 'spree_add_fields' }) %>
+		  </div>
+    </div>
+
+	</div>
+
+  <%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+<% end %>
+
+<%= javascript_tag do %>
+  var product_customization_option = <%= raw(@product_customization_option.to_json) %>;
+  $('#product_product_customization_option').on('keydown', 'input.autocomplete', function() {
+    already_auto_completed = $(this).is('ac_input');
+    if (!already_auto_completed) {
+      $(this).autocomplete({source: product_customization_option});
+      $(this).focus();
+    }
+  });
+<% end %>

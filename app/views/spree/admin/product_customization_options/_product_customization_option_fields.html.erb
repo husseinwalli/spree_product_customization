@@ -1,0 +1,23 @@
+<tr class="product_customization_option fields" id="spree_<%= dom_id(f.object) %>" data-hook="product_customization_option">
+  <td class="move-handle">
+    <% if f.object.persisted? && can?(:edit, f.object) %>
+      <span class="icon icon-move handle"></span>
+      <%= f.hidden_field :id %>
+    <% end %>
+  </td>
+  <td class='customization_option_name'>
+    <%= f.text_field :customization_option_name, class: 'autocomplete form-control' %>
+  </td>
+  <td class='name'>
+    <%= f.text_field :name, class: 'form-control' %>
+  </td>
+   <td class='required'>
+    <%= f.check_box :required, class: 'form-control' %>
+  </td>
+  <td class="actions actions-1">
+    <% if f.object.persisted? && can?(:destroy, f.object) %>
+      <%= link_to_delete f.object, no_text: true %>
+      <%= link_to_edit f.object, no_text: true %>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,68 @@
+<% content_for :page_title do %>
+  <%= plural_resource_name(Spree::CustomizationOption) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_customization_option), new_object_url, { :class => "btn-success", :icon => 'add', 'data-update' => 'new_customization_option', :id => 'new_customization_option_link' } %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_customization_option_sidebar">
+    <%= search_form_for [:admin, @search] do |f| %>
+
+      <%- locals = {:f => f} %>
+
+      <div class="row">
+        <div class="col col-md-6">
+          <div data-hook="admin_property_index_search" class="form-group">
+            <%= f.label :name_cont, Spree.t(:name) %>
+            <%= f.text_field :name_cont, :class => "form-control js-quick-search-target" %>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :presentation_cont, Spree.t(:presentation) %>
+            <%= f.text_field :presentation_cont, :class => "form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions" data-hook="admin_customization_options_index_search_buttons">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+
+    <% end %>
+  </div>
+<% end %>
+
+<% if @customization_options.any? %>
+  <table class="table" id='listing_customization_options' data-hook>
+    <thead>
+      <tr data-hook="listing_customization_options_header">
+        <th><%= Spree.t(:name) %></th>
+        <th><%= Spree.t(:presentation) %></th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @customization_options.each do |customization_option| %>
+        <tr id="<%= spree_dom_id customization_option %>" data-hook="listing_customization_options_row">
+          <td><%= customization_option.name %></td>
+          <td><%= customization_option.presentation %></td>
+          <td class="actions actions-2 text-right">
+            <%= link_to_edit(customization_option, :no_text => true) %>
+            <%= link_to_delete(customization_option, :no_text => true) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::CustomizationOption)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url %>!
+  </div>
+<% end %>
+
+<%= paginate @collection %>

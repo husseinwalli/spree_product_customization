@@ -1,0 +1,32 @@
+<tr class="product_customization_option_value fields" id="spree_<%= dom_id(f.object) %>" data-hook="product_customization_option_value">
+
+  <td class="move-handle">
+    <% if f.object.persisted? && can?(:edit, f.object) %>
+      <span class="icon icon-move handle"></span>
+      <%= f.hidden_field :id %>
+    <% end %>
+  </td>
+  
+  <td class="name">    
+    <%= f.text_field :name, class: 'form-control' %>    
+  </td>
+  
+  <td class="presentation">
+    <%= f.text_field :presentation, class: 'form-control' %>
+  </td>
+  
+  <td class="price">
+    <%= f.text_field :price, class: 'form-control' %>
+  </td>
+
+  <td class="price-per-unit">
+    <%= f.check_box :price_per_unit, class: 'form-control' %>
+  </td>
+
+  <td class="actions actions-1">
+    <% if f.object.persisted? && can?(:destroy, f.object) %>
+      <%= link_to_delete f.object, no_text: true %>
+    <% end %>
+  </td>
+
+</tr>
